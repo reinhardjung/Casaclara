@@ -1,0 +1,25 @@
+/* Casaclara */
+
+
+/* Gemeines */
+table, tr         { font:normal italic 56px verdana; }
+img								{ border:0; }
+h1                { color:blueviolet; }
+h2                { color:blue; }
+a                 { text-decoration:none; }
+
+
+
+/* Tabellen */
+table#myAddress			{ border:1px solid silver; }
+thead#myAddres			{ text-decoration:none; font:italic normal 12px verdana; color:black; }
+thead#myAddres a		{ text-decoration:none; color:white;}
+tfoot#myAddre, tr		{ font:normal italic 56px verdana; color:blue; }
+tbody#myAddress			{ font:normal italic 56px verdana; background-color:antiquewhite; }
+tbody#myAddress, tr#high	{ background-color:antiquewhite; }
+tbody#myAddress, tr#low		{ background-color:lavender; }
+
+
+
+/* Design */
+#homelink	{ font-style:italic; }
