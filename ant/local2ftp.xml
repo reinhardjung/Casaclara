@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="auf Gecko per FTP" default="build" basedir=".">
+	<description>kopiert die lokale Landstrasse per FTP auf den Gecko</description>
+
+	<property name="ftp.server" value="173.203.203.199" />
+	<property name="ftp.source" value="../../." />
+	<property name="ftp.remotedir" value="/." />
+	<property name="ftp.project" value="/rju_landstrasse" />
+	<property name="ftp.username" value="rjung" />
+	<property name="ftp.password" value="web4all" />
+
+<!--
+<input message="Username:" addproperty="ftp.username" />
+<input message="Password:" addproperty="ftp.password" />
+-->
+
+<fileset id="myFiles" dir="${ftp.source}">
+	<exclude name=".project" />
+</fileset>   
+
+<target name="build">
+	<antcall target="clean" />
+	<antcall target="deploy" />
+</target>
+
+	
+<target name="deploy">
+	<property name="sys.fertig" value="upload" />
+
+	<!-- Das RemoteVerzeichniss in einem Rutsch erstellen... -->
+	<ftp action="mkdir" server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" remotedir="${ftp.remotedir}${ftp.project}" />
+
+	<!-- ...und dann die Dateien hoch schieben -->
+	<ftp action="send" server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" remotedir="${ftp.remotedir}${ftp.project}" depends="yes">
+		<fileset refid="myFiles" />
+	</ftp>
+
+	<antcall target="done" />
+</target>
+
+
+<target name="help">
+	<echo message="Hallo ${user.name}, folgende Moeglichkeiten hast Du zu Fuss:" />
+	<echo message="deploy -f ${ant.file} -q   (stellt das Projekt per FTP ins Netz)" />
+	<echo message="clean  -f ${ant.file} -q   (VORSICHT: leoscht das akt. Projekt)" />
+</target>
+
+
+<target name="done">
+	<echo message="Bin fertig mit ${sys.fertig}, Chef!" />
+</target>
+
+
+<target name="clean">
+	<property name="sys.fertig" value="loeschen" />
+
+	<!-- leider muss man erst alle Dateien loeschen, -->
+	<ftp action="del" server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" remotedir="${ftp.remotedir}${ftp.project}">
+		<fileset>
+			<include name="**/*.*" />
+		</fileset>
+	</ftp>
+		
+	<!-- um auch alle Verzeichnisse loeschen zu koennen -->
+	<ftp action="rmdir" server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" remotedir="${ftp.remotedir}${ftp.project}">
+		<fileset>
+			<include name="**" />
+		</fileset>
+	</ftp>
+
+	<!-- inkl. Projektverzeichnis, klappt aler noch nciht mir der VAR: ${ftp.project}  :-( -->
+	<ftp action="rmdir" server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" remotedir="${ftp.remotedir}">
+	<fileset>
+	  <include name="rju_Landstrasse" />
+	</fileset>
+	</ftp>
+
+	<antcall target="done" />
+</target>
+
+</project>
